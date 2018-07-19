@@ -181,7 +181,6 @@ function mapStyles(styles) {
     classNames[key] = sheet[key];
     Object.defineProperty(classNames, key, {
       get() {
-        console.log('Inner party', Dynamic.get('--font-size'));
         return getClassNamesForKey(key);
       }
     });
