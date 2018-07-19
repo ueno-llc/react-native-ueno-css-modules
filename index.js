@@ -72,6 +72,7 @@ function mapStyles(styles) {
 
           // Loop through themes and check for prop names
           Themes.forEach((themeVars, themeName) => {
+            let fail = false;
             const themeClassName = `${className}__theme-${themeName}`;
             const propVarValue = propertyValue.replace(/var\((.*?)(,.*)?\)/, (str, varName, defaultValue) => {
               if (themeVars.has(varName.trim())) {
@@ -80,14 +81,14 @@ function mapStyles(styles) {
               if (defaultValue) {
                 return defaultValue.substr(1);
               }
-              return null;
+              fail = true;
             });
 
             // Ensure theme classNames
             cache[themeClassName] = cache[themeClassName] || {};
 
             // Assign new property values
-            if (propVarValue) {
+            if (!fail) {
               Object.assign(cache[themeClassName], getStylesForProperty(propertyName, propVarValue));
             }
           });
@@ -104,8 +105,10 @@ function mapStyles(styles) {
     for (propertyName in styles[className]) {
       const propertyValue = styles[className][propertyName];
       if (propertyValue && String(propertyValue).match(/var\((.*?)(,.*)?\)/)) {
+        let fail = false;
         const propVarValue = propertyValue.replace(/var\((.*?)(,.*)?\)/, (str, varName, defaultValue) => {
-          if (Dynamic.has(varName.trim())) {
+          const trimVarName = varName.trim();
+          if (Dynamic.has(trimVarName)) {
             const res = Dynamic.get(varName.trim());
             if (res instanceof Array && res.length >= 2) {
               return res[0][res[1]];
@@ -115,9 +118,9 @@ function mapStyles(styles) {
           if (defaultValue) {
             return defaultValue.substr(1);
           }
-          return false;
+          fail = true;
         });
-        if (propVarValue !== 'null') {
+        if (!fail) {
           Object.assign(res, getStylesForProperty(propertyName, propVarValue));
         }
       }
@@ -198,4 +201,5 @@ module.exports = {
   setTheme,
   mapStyles
 }
+
 
