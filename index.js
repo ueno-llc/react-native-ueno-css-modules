@@ -11,7 +11,7 @@ function setVars(obj) {
 }
 
 function setVar(key, value) {
-  Dynamic.set(key, value);
+  Dynamic.set(key, value)
 }
 
 function setThemeVars(name, obj) {
@@ -46,12 +46,10 @@ function mapStyles(styles) {
 
   // Cache builder for StyleSheet.create
   const cache = {};
-  const dynamic = {};
 
   // .className
   for (const className in styles) {
     cache[className] = {};
-    dynamic[className] = {};
 
     // propertyName: propertyValue;
     for (const propertyName in styles[className]) {
@@ -72,31 +70,27 @@ function mapStyles(styles) {
             Object.assign(cache[className], getStylesForProperty(propertyName, isCssVariable[2].substr(1)));
           }
 
-          if (Dynamic.has(isCssVariable[1].trim())) {
-            dynamic[className][propertyName] = propertyValue;
-          } else {
-            // Loop through themes and check for prop names
-            Themes.forEach((themeVars, themeName) => {
-              const themeClassName = `${className}__theme-${themeName}`;
-              const propVarValue = propertyValue.replace(/var\((.*?)(,.*)?\)/, (str, varName, defaultValue) => {
-                if (themeVars.has(varName.trim())) {
-                  return themeVars.get(varName.trim());
-                }
-                if (defaultValue) {
-                  return defaultValue.substr(1);
-                }
-                return null;
-              });
-
-              // Ensure theme classNames
-              cache[themeClassName] = cache[themeClassName] || {};
-
-              // Assign new property values
-              if (propVarValue) {
-                Object.assign(cache[themeClassName], getStylesForProperty(propertyName, propVarValue));
+          // Loop through themes and check for prop names
+          Themes.forEach((themeVars, themeName) => {
+            const themeClassName = `${className}__theme-${themeName}`;
+            const propVarValue = propertyValue.replace(/var\((.*?)(,.*)?\)/, (str, varName, defaultValue) => {
+              if (themeVars.has(varName.trim())) {
+                return themeVars.get(varName.trim());
               }
+              if (defaultValue) {
+                return defaultValue.substr(1);
+              }
+              return null;
             });
-          }
+
+            // Ensure theme classNames
+            cache[themeClassName] = cache[themeClassName] || {};
+
+            // Assign new property values
+            if (propVarValue) {
+              Object.assign(cache[themeClassName], getStylesForProperty(propertyName, propVarValue));
+            }
+          });
         }
       }
     }
@@ -107,20 +101,25 @@ function mapStyles(styles) {
   // Dynamic styles
   function getDynamicStyles(className) {
     const res = {};
-    for (propertyName in dynamic[className]) {
+    for (propertyName in styles[className]) {
       const propertyValue = styles[className][propertyName];
-      const propVarValue = propertyValue.replace(/var\((.*?)(,.*)?\)/, (str, varName, defaultValue) => {
-        if (Dynamic.has(varName.trim())) {
-          return Dynamic.get(varName.trim());
+      if (propertyValue && String(propertyValue).match(/var\((.*?)(,.*)?\)/)) {
+        const propVarValue = propertyValue.replace(/var\((.*?)(,.*)?\)/, (str, varName, defaultValue) => {
+          if (Dynamic.has(varName.trim())) {
+            const res = Dynamic.get(varName.trim());
+            if (res instanceof Array && res.length >= 2) {
+              return res[0][res[1]];
+            }
+            return res;
+          }
+          if (defaultValue) {
+            return defaultValue.substr(1);
+          }
+          return false;
+        });
+        if (propVarValue !== 'null') {
+          Object.assign(res, getStylesForProperty(propertyName, propVarValue));
         }
-        if (defaultValue) {
-          return defaultValue.substr(1);
-        }
-        return null;
-      });
-
-      if (propVarValue) {
-        Object.assign(res, getStylesForProperty(propertyName, propVarValue));
       }
     }
     return res;
@@ -179,7 +178,13 @@ function mapStyles(styles) {
   }
 
   for (const key in sheet) {
-    classNames[key] = getClassNamesForKey(key);
+    classNames[key] = sheet[key];
+    Object.defineProperty(classNames, key, {
+      get() {
+        console.log('Inner party', Dynamic.get('--font-size'));
+        return getClassNamesForKey(key);
+      }
+    });
   }
 
   return classNames;
