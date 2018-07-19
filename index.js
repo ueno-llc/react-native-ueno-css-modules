@@ -10,6 +10,10 @@ function setVars(obj) {
   Object.entries(obj).forEach(([key, val]) => Dynamic.set(key, val));
 }
 
+function setVar(key, value) {
+  Dynamic.set(key, value);
+}
+
 function setThemeVars(name, obj) {
   const cache = new Map();
   Object.entries(obj).forEach(([key, val]) => cache.set(key, val));
@@ -182,6 +186,9 @@ function mapStyles(styles) {
 };
 
 module.exports = {
+  Themes,
+  Dynamic,
+  setVar,
   setVars,
   setThemeVars,
   setTheme,

@@ -3,8 +3,19 @@
 declare function setVars(obj: Object): void;
 declare function setThemeVars(name: string, obj: Object): void;
 declare function setTheme(name: string): void;
+declare function getVar(name: string): any;
+declare function mapStyles(obj: Object): void;
+declare var Themes: Map;
+declare var Dynamic: Map;
 
-export = setVars;
-export = setThemeVars;
-export = setTheme;
+
+export module UenoCSSModules {
+  setVars;
+  setThemeVars;
+  setTheme;
+  getVar;
+  mapStyles;
+  Themes;
+  Dynamic;
+}
 
