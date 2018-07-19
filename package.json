@@ -1,0 +1,33 @@
+{
+  "name": "react-native-ueno-css-modules",
+  "version": "1.0.1",
+  "description": "React Native CSS Modules with variables and theme support",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "transformer.js"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ueno-llc/react-native-ueno-css-modules.git"
+  },
+  "dependencies": {
+    "app-root-path": "^2.1.0",
+    "css-to-react-native-transform": "^1.7.0",
+    "semver": "^5.5.0"
+  },
+  "peerDependencies": {
+    "react-native": ">=0.45.0"
+  },
+  "author": "Birkir Gudjonsson <birkir.gudjonsson@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ueno-llc/react-native-ueno-css-modules/issues"
+  },
+  "homepage": "https://github.com/ueno-llc/react-native-ueno-css-modules#readme"
+}
