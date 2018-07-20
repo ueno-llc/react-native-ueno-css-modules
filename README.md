@@ -59,3 +59,67 @@ styles.foo;
 styles({ foo: true });
 styles('foo', 'bar', { baz: true });
 ```
+
+## How this works
+
+Consider the following
+
+```scss
+// styles.css
+.sample {
+  text-align: left;
+  font-size: var(--font-size);
+  color: var(--primary-color);
+}
+```
+
+```jsx
+// Component.jsx
+import { setTheme, setThemeVars, setVar } from 'react-native-ueno-css-modules';
+
+// Set two themes: dark and light
+setThemeVars('light', {
+  '--primary-color': '#ffffff',
+});
+setThemeVars('dark', {
+  '--primary-color': '#000000',
+});
+
+// Set current theme
+setTheme('light');
+
+// Themes have to be allocated before requiring css files
+const styles = require('styles.css');
+
+// console.log(styles)
+{
+  sample: {
+    textAlign: 'left',
+  },
+  sample__theme__light: {
+    color: '#ffffff',
+  },
+  sample__theme__dark: {
+    color: '#000000',
+  },
+}
+
+// Set dynamic variable
+setVar('--font-size', 16);
+
+// console.log(styles.sample)
+[ styles.sample, styles.sample__theme__light, { fontSize: 16 } ];
+
+// Update dynamic style
+setVar('--font-size', 21);
+
+// console.log(styles.sample)
+[ styles.sample, styles.sample__theme__light, { fontSize: 21 } ];
+
+// Change theme
+setTheme('dark');
+
+// console.log(styles.sample)
+[ styles.sample, styles.sample__theme__dark, { fontSize: 21 } ];
+
+```
