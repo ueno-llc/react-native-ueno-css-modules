@@ -28,7 +28,11 @@ function getVar(name, fallbackValue) {
 
   // Find dynamic variable
   if (Dynamic.has(name)) {
-    return Dynamic.get(name);
+    const res = Dynamic.get(name);
+    if (res instanceof Array && res.length >= 2) {
+      return res[0][res[1]];
+    }
+    return res;
   }
 
   // Find theme variable
@@ -196,6 +200,7 @@ module.exports = {
   Themes,
   Dynamic,
   setVar,
+  getVar,
   setVars,
   setThemeVars,
   setTheme,
