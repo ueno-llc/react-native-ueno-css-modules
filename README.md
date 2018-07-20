@@ -1,6 +1,16 @@
 # react-native-ueno-css-modules
 React Native CSS Modules with variables and theme support
 
+```bash
+yarn add react-native-ueno-css-modules
+
+# And optional pre-processors
+yarn add node-sass
+yarn add stylus
+yarn add less
+```
+
+
 ### Transformer
 ```js
 const upstreamTransformer = require('metro/src/reactNativeTransformer');

@@ -1,3 +1,4 @@
+var path = require("path");
 var semver = require("semver");
 var css2rn = require("css-to-react-native-transform").default;
 var upstreamTransformer = null;
