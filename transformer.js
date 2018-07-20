@@ -80,7 +80,7 @@ module.exports.transform = function(src, filename, options) {
     if (!transformers.sass) {
       transformers.sass = require("node-sass");
     }
-    var result = sass.renderSync({
+    var result = transformers.sass.renderSync({
       data: src,
       includePaths: [path.dirname(filename), appRoot]
     });
