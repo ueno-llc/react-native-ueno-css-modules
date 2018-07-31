@@ -1,6 +1,6 @@
 // Type definitions for react-native-ueno-css-modules 1.0.0
 
-decalre function setVar(name: string, value: any): void;
+declare function setVar(name: string, value: any): void;
 declare function setVars(obj: Object): void;
 declare function setThemeVars(name: string, obj: Object): void;
 declare function setTheme(name: string): void;
