@@ -1,4 +1,4 @@
-const { StyleSheet } = require('react-native');
+const { Platform, StyleSheet } = require('react-native');
 const { getStylesForProperty } = require('css-to-react-native');
 
 const Dynamic = new Map();
