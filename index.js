@@ -79,6 +79,9 @@ function mapStyles(styles) {
             let fail = false;
             const themeClassName = `${className}__theme-${themeName}`;
             const propVarValue = propertyValue.replace(/var\((.*?)(,.*)?\)/, (str, varName, defaultValue) => {
+              if (themeVars.has(`${varName.trim()}-${Platform.OS}`)) {
+                return themeVars.get(`${varName.trim()}-${Platform.OS}`);
+              }
               if (themeVars.has(varName.trim())) {
                 return themeVars.get(varName.trim());
               }
@@ -138,8 +141,6 @@ function mapStyles(styles) {
       sheet[key],
       // Add theme variables
       sheet[`${key}__theme-${theme}`],
-      // Add platform variable
-      sheet[`${key}-${Platform.OS}`],
       // Add dynamic variables
       getDynamicStyles(key),
     ].filter(n => {
@@ -194,6 +195,9 @@ function mapStyles(styles) {
       }
     });
   }
+
+  // Added for debugging purpose
+  classNames.__cache__ = cache;
 
   return classNames;
 };
