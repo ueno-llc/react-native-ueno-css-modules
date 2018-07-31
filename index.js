@@ -138,6 +138,8 @@ function mapStyles(styles) {
       sheet[key],
       // Add theme variables
       sheet[`${key}__theme-${theme}`],
+      // Add platform variable
+      sheet[`${key}-${Platform.OS}`],
       // Add dynamic variables
       getDynamicStyles(key),
     ].filter(n => {
