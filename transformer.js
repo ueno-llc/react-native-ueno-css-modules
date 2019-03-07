@@ -7,7 +7,10 @@ var reactNativeMinorVersion = semver(reactNativeVersionString).minor;
 var appRoot = require("app-root-path");
 var transformers = {};
 
-if (reactNativeMinorVersion >= 56) {
+
+if (reactNativeMinorVersion >= 59) {
+  upstreamTransformer = require("metro-react-native-babel-transformer");
+} else if (reactNativeMinorVersion >= 56) {
   upstreamTransformer = require("metro/src/reactNativeTransformer");
 } else if (reactNativeMinorVersion >= 52) {
   upstreamTransformer = require("metro/src/transformer");
